@@ -5,8 +5,10 @@ import Card from './components/Card/Card'
 import cards from "./cards.json";
 import './App.css';
 
+let shuffledArr = [];
 
 class App extends Component {
+
   state = {
     cards,
     selectedCards: [],
@@ -14,14 +16,20 @@ class App extends Component {
     highestScore: 0
   }
 
-  shuffleCards = () => {
+  componentDidMount(){
+    shuffledArr = this.shuffleCards(this.state.cards);
+    console.log(shuffledArr);
+  }
 
+  shuffleCards = arr => {
+    const shuffled = arr.sort(() => Math.random() - 0.5);
+    return shuffled;
   }
 
   selectedCard = id => {
     console.log(id);
     const selectedArr = this.state.selectedCards;
-    // this.shuffleCards();
+    shuffledArr = this.shuffleCards(this.state.cards);
       console.log("click");
       if (selectedArr.includes(id)) {
         this.setState({
@@ -48,11 +56,11 @@ class App extends Component {
           <h1 className="display-4">Clicky Memory Game!</h1>
           <p className="lead">Click on an image to earn points, but don't click on a any more than once!</p>
         </Title>
-        {this.state.cards.map(friend => (
+        {this.shuffleCards(this.state.cards).map(card => (
           <Card
-            key={friend.id}
-            id={friend.id}
-            image={friend.image}
+            key={card.id}
+            id={card.id}
+            image={card.image}
             clicked={this.selectedCard}
           />
         ))}
